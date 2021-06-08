@@ -1,70 +1,132 @@
-# Getting Started with Create React App
+## Getting started
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+1. Clone this repository
 
-## Available Scripts
+2. Install al the project dependencies
 
-In the project directory, you can run:
+```
+npm install
+```
 
-### `yarn start`
+3. Copy the new index.html file with some necesary imports
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+cp base/index-01.html public/index.html
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Getting started with Amplify
 
-### `yarn test`
+1. Go to your AWS console and create a new Amplify Backend Application
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Open the AdminUI for that application
 
-### `yarn build`
+## Add authentication
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. In the admin UI add authentication with the default settings and deploy it.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. After the application finish deploying. Go to your react application and do amplify pull as the instructions mentions.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. Add authentication in your front end
 
-### `yarn eject`
+```
+cp base/App-01.css src/App.css
+cp base/App-01.js src/App.js
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+4. Start the react app and see what happen. Create an account.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Add GraphQL API
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+1. Go back to the AdminUI and in data, create a new model.
 
-## Learn More
+Make sure that you choose the cognito user pool (the authentication we just created) as authentication model for this API.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Model name: Note
+Attributes:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- id
+- note: string!
 
-### Code Splitting
+2. Deploy the API and after it finish deploying follow the instructions on amplify pull.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+3. Add the API in your client
 
-### Analyzing the Bundle Size
+```
+cp base/App-02.js src/App.js
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+4. Check the react app and see what happened. Add a note, delete it.
 
-### Making a Progressive Web App
+## Deploy this in the cloud
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+1. Create a new repository in github and put the react app in there.
 
-### Advanced Configuration
+NOTE: if you cloned this project make sure first to remove the origin so you can commit this code to a new place.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```
+git remote remove origin
+```
 
-### Deployment
+2. Go to the AWS Console and Amplify and add a new github project for the frontend.
+   Note: Pick the existing backend enviroment or if you want to have multiple environments pick a new one.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+3. Open the link and test the application that is in the cloud.
 
-### `yarn build` fails to minify
+## Add ML capabilities
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. In the AdminUI, modify the data model and deploy it
+
+Model: Note
+Attributes:
+
+- id
+- note
+- sentiment: String ---> NEW
+- spanish: String ---> NEW
+
+2. In the client pull the changes as the instructions mention
+
+3. Add predictions Interpret --> TEXT
+
+```
+$ amplify add predictions
+? Please select from one of the categories below Interpret
+? What would you like to interpret? Interpret Text
+? Provide a friendly name for your resource interpretTextXXX
+? What kind of interpretation would you like? All
+? Who should have access? Auth users only
+Successfully added resource interpretTextXXX locally
+```
+
+4. Add predictions Convert --> Translate
+
+```
+$ amplify add predictions
+? Please select from one of the categories below Convert
+? What would you like to convert? Translate text into a different language
+? Provide a friendly name for your resource translateTextfaXXX
+? What is the source language? English
+? What is the target language? Spanish
+? Who should have access? Auth users only
+Successfully added resource translateTextfaXXX locally
+```
+
+5. When that is complete do amplify push
+
+```
+amplify push
+```
+
+6. Then modify the client to see the new features in action:
+
+```
+cp base/App-03.js src/App.js
+```
+
+7. Commit all the new changes in github and see how the CICD pipeline in the Amplify app triggers.
+
+8. Test it in the cloud.
