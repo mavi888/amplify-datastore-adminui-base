@@ -130,3 +130,7 @@ cp base/App-03.js src/App.js
 7. Commit all the new changes in github and see how the CICD pipeline in the Amplify app triggers.
 
 8. Test it in the cloud.
+
+## In spanish - Mira todo este tutorial en formato video
+
+https://www.youtube.com/watch?v=xIy0KVMOHHw
